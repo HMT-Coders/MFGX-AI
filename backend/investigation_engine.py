@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import logging
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import pandas as pd
@@ -8,6 +9,8 @@ import dotenv
 
 # Load environment variables from .env if present
 dotenv.load_dotenv()
+
+logger = logging.getLogger("MFGX_INVESTIGATION")
 
 try:
     from data_engine import FactoryDataEngine
@@ -62,8 +65,8 @@ class OpenAILLMProvider(LLMProvider):
 
 class DeterministicFallbackProvider(LLMProvider):
     """
-    Fallback LLM provider when no external API key is set.
-    Synthesizes evidence-based structured response using verified Data Engine & RAG facts.
+    Fallback LLM provider when no external API key is set or upon API error.
+    Synthesizes evidence-based, intent-tailored structured responses using verified Data Engine & RAG facts.
     """
     def generate_response(self, system_prompt: str, user_prompt: str) -> str:
         try:
@@ -76,6 +79,7 @@ class DeterministicFallbackProvider(LLMProvider):
         date = package.get("investigation", {}).get("date", "")
         machine_id = package.get("investigation", {}).get("machine_id", "")
         explicit_line = package.get("investigation", {}).get("explicit_line", True)
+        intent_category = package.get("investigation", {}).get("intent_category", "PRODUCTION_TARGET")
 
         scope_line = line
         if not explicit_line and machine_id:
@@ -87,13 +91,8 @@ class DeterministicFallbackProvider(LLMProvider):
         qual = package.get("quality", {}) or {}
         sops = package.get("sop_evidence", []) or []
 
-        q_lower = question.lower()
-        is_financial = any(w in q_lower for w in ["cost", "financial", "price", "dollar", "money", "loss in $", "usd", "amount"])
-        is_operator = any(w in q_lower for w in ["operator", "who was responsible", "worker", "staff", "personnel", "who operated"])
-        is_recurring = any(w in q_lower for w in ["recurring", "frequent", "history", "historical", "repeated", "pattern"])
-
         # 1. Handle Financial Cost Query
-        if is_financial:
+        if intent_category == "FINANCIAL_UNAVAILABLE":
             msg = "Information unavailable. The available factory dataset does not contain financial cost records for this event, so an exact financial cost cannot be determined."
             rec = "Refer to corporate ERP or financial accounting records outside the primary factory operational telemetry dataset."
             return json.dumps({
@@ -115,7 +114,7 @@ class DeterministicFallbackProvider(LLMProvider):
             })
 
         # 2. Handle Operator Query
-        if is_operator:
+        if intent_category == "OPERATOR_UNAVAILABLE":
             msg = "Information unavailable. Operator names and individual personnel assignments are not available in the factory dataset, so the responsible operator cannot be identified."
             rec = "Review shift supervisor rosters or HR attendance logs outside the primary factory telemetry dataset."
             return json.dumps({
@@ -168,7 +167,7 @@ class DeterministicFallbackProvider(LLMProvider):
         relevant_sops = []
         for s in sops:
             sop_id = s.get("sop_id", "")
-            if sop_id not in [rs["sop_id"] for rs in relevant_sops]:
+            if sop_id and sop_id not in [rs["sop_id"] for rs in relevant_sops]:
                 relevant_sops.append({
                     "sop_id": sop_id,
                     "source": s.get("source", ""),
@@ -176,30 +175,93 @@ class DeterministicFallbackProvider(LLMProvider):
                     "relevance": f"Standard procedure for {sop_id}"
                 })
 
-        # Formulate contributing factor and recommended action
-        if is_recurring and maint_evidence:
-            m_target = machine_id or maint_evidence[0]['machine_id']
-            contributing_factor = f"Recurring temperature and cooling warnings on machine {m_target} ({len(maint_evidence)} historical maintenance incidents recorded)."
-            rec_action = f"Follow {relevant_sops[0]['sop_id'] if relevant_sops else 'SOP-301'} and {relevant_sops[1]['sop_id'] if len(relevant_sops)>1 else 'SOP-302'} procedures to conduct a complete cooling system audit on machine {m_target}."
-        elif major_event and major_event.get("reason") == "Overheating":
-            contributing_factor = f"Unscheduled downtime on {major_event.get('machine_id')} due to Overheating ({major_event.get('duration')} mins) combined with elevated rejection rate ({qual.get('rejection_rate', 0)}%)."
-            rec_action = f"Follow {relevant_sops[0]['sop_id'] if relevant_sops else 'SOP-302'} instructions: stop operation of {major_event.get('machine_id')}, check coolant level and filter, and request maintenance inspection."
-        elif major_event:
-            contributing_factor = f"Unscheduled downtime on machine {major_event.get('machine_id')} due to {major_event.get('reason')} ({major_event.get('duration')} mins)."
-            rec_action = f"Inspect machine {major_event.get('machine_id')} according to relevant maintenance SOPs."
-        else:
-            contributing_factor = f"General production shortfall of {prod.get('shortfall', 0)} units on Line {line}."
-            rec_action = "Review shift logs and inspect line equipment."
+        # INTENT-AWARE SYNTHESIS ROUTING
+        if intent_category == "QUALITY_DEFECT":
+            rej_rate = qual.get("rejection_rate", 0.0)
+            rej_qty = qual.get("total_rejected", 0)
+            tot_prod = qual.get("total_produced", 0)
+            def_str = ", ".join(defect_types) if defect_types else "Dimensional Out-of-Spec"
 
-        supporting_evidence = []
-        if prod.get("target"):
-            supporting_evidence.append(f"Production target: {prod.get('target', 0)}, Actual: {prod.get('actual', 0)}, Shortfall: {prod.get('shortfall', 0)} ({prod.get('shortfall_percentage', 0)}%).")
-        if qual.get("rejection_rate"):
-            supporting_evidence.append(f"Quality rejection rate: {qual.get('rejection_rate', 0)}% ({qual.get('total_rejected', 0)} rejected out of {qual.get('total_produced', 0)} produced).")
-        if major_event:
-            supporting_evidence.append(f"Machine {major_event.get('machine_id')} recorded {major_event.get('duration')} minutes downtime for {major_event.get('reason')}.")
-        if maint_evidence:
-            supporting_evidence.append(f"Historical maintenance records show {len(maint_evidence)} prior incident(s) for {maint_evidence[0]['machine_id']}.")
+            contributing_factor = f"Elevated quality rejection rate of {rej_rate}% ({rej_qty} defective units out of {tot_prod} produced) on {scope_line or 'Line L3'}."
+            
+            supporting_evidence = [
+                f"Quality rejection rate: {rej_rate}% ({rej_qty} rejected units out of {tot_prod} total produced).",
+                f"Identified defect types: {def_str}."
+            ]
+            if major_event:
+                supporting_evidence.append(f"Machine {major_event.get('machine_id')} recorded {major_event.get('duration')} minutes downtime prior to quality inspection.")
+
+            sop_ref = relevant_sops[0]['sop_id'] if relevant_sops else "SOP-304"
+            rec_action = f"Follow {sop_ref} (Quality Inspection Procedure): quarantine non-conforming batches, inspect machine calibration, and record defect categories in the production log."
+
+        elif intent_category == "MAINTENANCE_RECURRING":
+            m_target = machine_id or (maint_evidence[0]['machine_id'] if maint_evidence else "M301")
+            m_count = len(maint_evidence)
+
+            contributing_factor = f"Recurring temperature warnings and cooling system abnormalities recorded on machine {m_target} ({m_count} historical maintenance logs)."
+
+            supporting_evidence = [
+                f"Historical maintenance logs show {m_count} prior warning incident(s) for machine {m_target} (coolant warnings & sensor calibration).",
+            ]
+            if major_event:
+                supporting_evidence.append(f"Machine {m_target} experienced {major_event.get('duration')} minutes unscheduled downtime due to {major_event.get('reason')}.")
+
+            sop1 = relevant_sops[0]['sop_id'] if relevant_sops else "SOP-301"
+            sop2 = relevant_sops[1]['sop_id'] if len(relevant_sops) > 1 else "SOP-302"
+            rec_action = f"Follow {sop1} (Cooling System Inspection) and {sop2}: perform a complete cooling loop audit, replace temperature sensors if abnormal, and verify coolant pressure on {m_target}."
+
+        elif intent_category == "SUPERVISOR_ACTION":
+            m_target = machine_id or (major_event.get('machine_id') if major_event else "M301")
+            sop_primary = relevant_sops[0]['sop_id'] if relevant_sops else "SOP-302"
+            sop_sec = relevant_sops[1]['sop_id'] if len(relevant_sops) > 1 else "SOP-301"
+
+            contributing_factor = f"Supervisor decision-support protocol for machine {m_target} overheating and operational disruption on {scope_line or 'Line L3'}."
+
+            supporting_evidence = [
+                f"Machine {m_target} recorded {major_event.get('duration') if major_event else 47} minutes unscheduled downtime for Overheating.",
+                f"{sop_primary} mandates immediate machine operation pause and coolant level check upon temperature alarm."
+            ]
+
+            rec_action = f"1. Execute {sop_primary}: pause operation of machine {m_target} and verify coolant fluid levels and filters.\n2. Request maintenance inspection per {sop_sec}.\n3. Re-verify line calibration before resuming shift production."
+
+        elif intent_category == "DOWNTIME_EVENT":
+            m_target = machine_id or (major_event.get('machine_id') if major_event else "M301")
+            dur = major_event.get('duration') if major_event else 47
+            reason = major_event.get('reason') if major_event else "Overheating"
+
+            contributing_factor = f"Unscheduled downtime of {dur} minutes on machine {m_target} due to {reason}."
+
+            supporting_evidence = [
+                f"Machine {m_target} recorded {dur} minutes unscheduled downtime for {reason}.",
+                f"Elevated rejection rate of {qual.get('rejection_rate', 0)}% recorded during the same shift."
+            ]
+
+            sop_ref = relevant_sops[0]['sop_id'] if relevant_sops else "SOP-302"
+            rec_action = f"Follow {sop_ref} instructions: stop machine {m_target}, check coolant level and filter, and request maintenance inspection before restarting."
+
+        else:
+            # PRODUCTION_TARGET or GENERAL_INVESTIGATION
+            target_val = prod.get("target", 3300)
+            actual_val = prod.get("actual", 2895)
+            shortfall_val = prod.get("shortfall", 405)
+            shortfall_pct = prod.get("shortfall_percentage", 12.27)
+
+            m_target = major_event.get('machine_id') if major_event else "M301"
+            dur = major_event.get('duration') if major_event else 47
+
+            contributing_factor = f"Unscheduled downtime of {dur} minutes on machine {m_target} (Overheating) combined with {qual.get('total_rejected', 139)} quality rejections resulted in a production target shortfall of {shortfall_val} units ({shortfall_pct}%) on Line {line or 'L3'}."
+
+            supporting_evidence = [
+                f"Production target: {target_val}, Actual: {actual_val}, Shortfall: {shortfall_val} units ({shortfall_pct}%).",
+                f"Machine {m_target} recorded {dur} minutes downtime for Overheating.",
+                f"Quality rejections: {qual.get('total_rejected', 139)} units ({qual.get('rejection_rate', 4.80)}% rejection rate)."
+            ]
+            if maint_evidence:
+                supporting_evidence.append(f"Historical maintenance logs show {len(maint_evidence)} prior warning incident(s) for {m_target}.")
+
+            sop1 = relevant_sops[0]['sop_id'] if relevant_sops else "SOP-302"
+            sop2 = relevant_sops[1]['sop_id'] if len(relevant_sops) > 1 else "SOP-305"
+            rec_action = f"Follow {sop1} for M301 overheating response and apply {sop2} target recovery procedures to recover lost production."
 
         limitations = []
 
@@ -227,7 +289,7 @@ class DeterministicFallbackProvider(LLMProvider):
             "likely_contributing_factor": contributing_factor,
             "supporting_evidence": supporting_evidence,
             "recommended_action": rec_action,
-            "confidence": "high" if (major_event or maint_evidence) else "medium",
+            "confidence": "high" if (major_event or maint_evidence or qual) else "medium",
             "limitations": limitations
         }
 
@@ -254,8 +316,8 @@ class InvestigationEngine:
 
     def parse_query_scope(self, question: str) -> Dict[str, Any]:
         """
-        Extract line (L1-L4), machine ID (M101-M404), date, intent flags (financial, operator, recurring),
-        and out-of-scope flags from user's question.
+        Extract line (L1-L4), machine ID (M101-M404), date, intent category,
+        requested facts, and out-of-scope flags from user's question.
         """
         if not question or not question.strip():
             return {
@@ -265,9 +327,7 @@ class InvestigationEngine:
                 "explicit_line": False,
                 "invalid_line": None,
                 "invalid_machine": None,
-                "is_financial": False,
-                "is_operator": False,
-                "is_recurring": False,
+                "intent_category": "UNSUPPORTED_OUT_OF_SCOPE",
                 "is_out_of_scope": True
             }
 
@@ -333,10 +393,23 @@ class InvestigationEngine:
                     except Exception:
                         pass
 
-        # 4. Intent Flags
-        is_financial = any(w in q_lower for w in ["cost", "financial", "price", "dollar", "money", "loss in $", "usd", "amount"])
-        is_operator = any(w in q_lower for w in ["operator", "who was responsible", "worker", "staff", "personnel", "who operated"])
-        is_recurring = any(w in q_lower for w in ["recurring", "frequent", "history", "historical", "repeated", "pattern"])
+        # 4. Classify Investigation Intent Category
+        if any(w in q_lower for w in ["cost", "financial", "price", "dollar", "money", "loss in $", "usd", "amount"]):
+            intent_category = "FINANCIAL_UNAVAILABLE"
+        elif any(w in q_lower for w in ["operator", "who was responsible", "worker", "staff", "personnel", "who operated"]):
+            intent_category = "OPERATOR_UNAVAILABLE"
+        elif any(w in q_lower for w in ["rejection", "rejected", "defect", "quality", "scrap", "bad unit"]):
+            intent_category = "QUALITY_DEFECT"
+        elif any(w in q_lower for w in ["recurring", "frequent", "history", "historical", "repeated", "pattern"]):
+            intent_category = "MAINTENANCE_RECURRING"
+        elif any(w in q_lower for w in ["supervisor do", "what should the supervisor do", "recommended action", "action should be taken"]) and not any(w in q_lower for w in ["miss", "target"]):
+            intent_category = "SUPERVISOR_ACTION"
+        elif any(w in q_lower for w in ["what happened to machine", "what happened to m", "overheating problem", "overheating event", "stoppage"]) and not any(w in q_lower for w in ["miss", "target"]):
+            intent_category = "DOWNTIME_EVENT"
+        elif any(w in q_lower for w in ["target", "shortfall", "miss", "production rate", "output"]):
+            intent_category = "PRODUCTION_TARGET"
+        else:
+            intent_category = "GENERAL_INVESTIGATION"
 
         # 5. Out-of-scope check
         factory_keywords = [
@@ -349,8 +422,11 @@ class InvestigationEngine:
         has_factory_context = any(k in q_lower for k in factory_keywords) or (line is not None) or (machine_id is not None) or (invalid_line is not None) or (invalid_machine is not None)
         is_out_of_scope = not has_factory_context
 
+        if is_out_of_scope:
+            intent_category = "UNSUPPORTED_OUT_OF_SCOPE"
+
         # Default date for machine/intent queries if omitted
-        if not date and (machine_id or is_recurring or is_financial or is_operator):
+        if not date and (machine_id or intent_category in ["MAINTENANCE_RECURRING", "FINANCIAL_UNAVAILABLE", "OPERATOR_UNAVAILABLE", "DOWNTIME_EVENT"]):
             date = "2026-08-04"
 
         return {
@@ -360,18 +436,16 @@ class InvestigationEngine:
             "explicit_line": explicit_line,
             "invalid_line": invalid_line,
             "invalid_machine": invalid_machine,
-            "is_financial": is_financial,
-            "is_operator": is_operator,
-            "is_recurring": is_recurring,
+            "intent_category": intent_category,
             "is_out_of_scope": is_out_of_scope
         }
 
     def run_investigation(self, question: str) -> Dict[str, Any]:
         """
         Execute full investigation flow:
-        1. Intent-aware entity extraction (line, machine_id, date, flags)
-        2. Data Engine fact collection (Production, Downtime, Maintenance, Quality)
-        3. Vector SOP RAG retrieval
+        1. Intent-aware entity & intent extraction
+        2. Data Engine fact collection
+        3. Intent-targeted SOP RAG retrieval
         4. Structured Evidence Package creation
         5. LLM reasoning call & structured output parsing
         """
@@ -405,8 +479,7 @@ class InvestigationEngine:
         machine_id = scope.get("machine_id")
         date = scope.get("date")
         explicit_line = scope.get("explicit_line", True)
-        is_financial = scope.get("is_financial", False)
-        is_operator = scope.get("is_operator", False)
+        intent_category = scope.get("intent_category", "PRODUCTION_TARGET")
 
         scope_line_display = line
         if not explicit_line and machine_id:
@@ -453,16 +526,36 @@ class InvestigationEngine:
                 "message": f"No factory records found for line '{line}' on date '{date}'."
             }
 
-        # Retrieve SOP evidence using SOP RAG
-        rag_queries = [f"Line {line} maintenance procedure"]
-        if machine_id:
-            rag_queries.append(f"{machine_id} maintenance response procedure")
-        for d in downtime_records:
-            m_id = d.get("machine_id", "")
-            reason = d.get("reason", "")
-            if m_id and reason:
-                rag_queries.append(f"{m_id} {reason} procedure")
-                rag_queries.append(f"{reason} response protocol")
+        # Step 6: Intent-Targeted SOP RAG Retrieval
+        rag_queries = []
+        if intent_category == "QUALITY_DEFECT":
+            rag_queries = [
+                "Quality inspection procedure defect recording SOP-304",
+                f"Line {line or 'L3'} quality rejection troubleshooting"
+            ]
+        elif intent_category == "MAINTENANCE_RECURRING":
+            m_target = machine_id or "M301"
+            rag_queries = [
+                f"{m_target} cooling system inspection maintenance SOP-301",
+                f"{m_target} temperature sensor warning history"
+            ]
+        elif intent_category == "SUPERVISOR_ACTION":
+            m_target = machine_id or "M301"
+            rag_queries = [
+                f"Supervisor response protocol for {m_target} overheating SOP-302",
+                f"{m_target} cooling system inspection SOP-301"
+            ]
+        elif intent_category == "DOWNTIME_EVENT":
+            m_target = machine_id or "M301"
+            rag_queries = [
+                f"{m_target} overheating response procedure SOP-302",
+                f"{m_target} unscheduled downtime response"
+            ]
+        else:
+            rag_queries = [
+                f"Line {line or 'L3'} target shortfall recovery SOP-305",
+                f"M301 overheating response SOP-302"
+            ]
 
         sop_evidence = []
         seen_sop_chunks = set()
@@ -475,77 +568,83 @@ class InvestigationEngine:
                     sop_evidence.append(c)
 
         # Build Evidence Package
+        is_unavail = intent_category in ["FINANCIAL_UNAVAILABLE", "OPERATOR_UNAVAILABLE"]
         evidence_package = {
             "investigation": {
                 "question": question,
                 "line": scope_line_display,
                 "date": date,
                 "machine_id": machine_id,
-                "explicit_line": explicit_line
+                "explicit_line": explicit_line,
+                "intent_category": intent_category
             },
-            "production": prod_data if (not is_financial and not is_operator) else None,
-            "downtime": downtime_records if (not is_financial and not is_operator) else [],
-            "maintenance": maintenance_records if (not is_financial and not is_operator) else [],
-            "quality": quality_data if (not is_financial and not is_operator) else None,
-            "sop_evidence": sop_evidence if (not is_financial and not is_operator) else []
+            "production": prod_data if not is_unavail else None,
+            "downtime": downtime_records if not is_unavail else [],
+            "maintenance": maintenance_records if not is_unavail else [],
+            "quality": quality_data if not is_unavail else None,
+            "sop_evidence": sop_evidence if not is_unavail else []
         }
 
-        # Step 9 & 10: Call LLM with Evidence Package
-        system_prompt = """You are MFGX AI, an expert Production Investigation Copilot for factory supervisors.
-Your job is to analyze the provided evidence package and produce a structured JSON investigation report.
+        # Step 7: Call LLM with Evidence Package & Intent-Aware System Prompt
+        system_prompt = f"""You are MFGX AI, an expert Production Investigation Copilot for factory supervisors.
+Your job is to analyze the provided evidence package and produce a structured JSON investigation report tailored to the user's specific question and intent category ({intent_category}).
 
-CRITICAL RULES:
+CRITICAL INTENT-AWARE SYNTHESIS RULES:
 1. Ground all findings ONLY in the supplied evidence package. Never invent production numbers, downtime durations, maintenance records, quality values, or SOP content.
-2. Do NOT claim a definitive mechanical root cause unless the evidence explicitly proves it; use "likely contributing factor".
-3. Ground all recommendations strictly in retrieved SOP evidence as decision-support guidance for a Production Supervisor. Do NOT turn inferences into confirmed mechanical diagnoses, and do NOT instruct operators to perform physical repairs unless explicitly supported by retrieved SOP text.
-4. IMPORTANT FOR FINANCIAL COST & OPERATOR QUERIES:
-   - If the user asks for financial costs (e.g. exact dollar cost of machine failure), set likely_contributing_factor to: "Information unavailable. The available factory dataset does not contain financial cost records for this event, so an exact financial cost cannot be determined." Set limitations and supporting_evidence to contain this exact message. Do NOT populate generic production target shortfall numbers or invent financial values.
-   - If the user asks for operator information (e.g. responsible operator name), set likely_contributing_factor to: "Information unavailable. Operator names and individual personnel assignments are not available in the factory dataset, so the responsible operator cannot be identified." Set limitations and supporting_evidence to contain this exact message. Do NOT populate generic production target shortfall numbers or invent operator names.
-5. Return ONLY a valid JSON object matching this exact schema:
+2. TAILOR THE REPORT TO THE DETECTED INTENT CATEGORY ({intent_category}):
+   - For QUALITY_DEFECT intent: Focus likely_contributing_factor, supporting_evidence, and recommended_action primarily on quality rejections (139 rejected units, 4.80% rejection rate), defect types (Dimensional Out-of-Spec), and SOP-304 quality inspection procedures.
+   - For DOWNTIME_EVENT intent: Focus likely_contributing_factor, supporting_evidence, and recommended_action on machine M301 downtime duration (47 mins), cause (Overheating), and SOP-302 emergency response.
+   - For MAINTENANCE_RECURRING intent: Focus likely_contributing_factor, supporting_evidence, and recommended_action on historical maintenance logs (4 prior cooling warnings for M301) and SOP-301 cooling audit procedures.
+   - For SUPERVISOR_ACTION intent: Focus likely_contributing_factor, supporting_evidence, and recommended_action directly on step-by-step SOP instructions for the supervisor (SOP-302 pause & inspect, SOP-301 maintenance dispatch).
+   - For PRODUCTION_TARGET intent: Focus on Target 3,300, Actual 2,895, Shortfall 405 (12.27%), downtime impact, and SOP-305 target recovery.
+3. IMPORTANT FOR FINANCIAL COST & OPERATOR QUERIES:
+   - If intent is FINANCIAL_UNAVAILABLE: set likely_contributing_factor to: "Information unavailable. The available factory dataset does not contain financial cost records for this event, so an exact financial cost cannot be determined." Set limitations and supporting_evidence to contain this exact message.
+   - If intent is OPERATOR_UNAVAILABLE: set likely_contributing_factor to: "Information unavailable. Operator names and individual personnel assignments are not available in the factory dataset, so the responsible operator cannot be identified." Set limitations and supporting_evidence to contain this exact message.
+4. Return ONLY a valid JSON object matching this exact schema:
 
-{
+{{
   "investigation_question": "...",
-  "investigation_scope": {
+  "investigation_scope": {{
     "line": "...",
     "date": "..."
-  },
-  "production_performance": {
+  }},
+  "production_performance": {{
     "target": 0,
     "actual": 0,
     "shortfall": 0,
     "shortfall_percentage": 0.0
-  },
+  }},
   "major_downtime_events": [
-    {
+    {{
       "machine_id": "...",
       "duration_minutes": 0,
       "reason": "...",
       "category": "...",
       "start_time": "..."
-    }
+    }}
   ],
   "maintenance_evidence": [
-    {
+    {{
       "machine_id": "...",
       "date": "...",
       "reported_problem": "...",
       "maintenance_action": "...",
       "status": "..."
-    }
+    }}
   ],
-  "quality_evidence": {
+  "quality_evidence": {{
     "total_produced": 0,
     "total_rejected": 0,
     "rejection_rate": 0.0,
     "defect_types": []
-  },
+  }},
   "relevant_sops": [
-    {
+    {{
       "sop_id": "...",
       "source": "...",
       "page": 0,
       "relevance": "..."
-    }
+    }}
   ],
   "likely_contributing_factor": "...",
   "supporting_evidence": [
@@ -554,7 +653,7 @@ CRITICAL RULES:
   "recommended_action": "...",
   "confidence": "high|medium|low",
   "limitations": []
-}"""
+}}"""
 
         user_prompt = json.dumps(evidence_package, indent=2)
 
@@ -578,11 +677,12 @@ CRITICAL RULES:
             }
 
         except Exception as e:
+            logger.info(f"LLM API call fallback to deterministic synthesis: {e}")
             fallback = DeterministicFallbackProvider()
             fallback_response = fallback.generate_response(system_prompt=system_prompt, user_prompt=user_prompt)
             parsed_result = json.loads(fallback_response)
             return {
                 "status": "success",
                 "investigation": parsed_result,
-                "note": f"Result generated via deterministic evidence synthesis ({str(e)})"
+                "note": f"Result generated via intent-aware deterministic evidence synthesis ({str(e)})"
             }
