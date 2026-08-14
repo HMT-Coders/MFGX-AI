@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: mfgx-ai-backend
+    env: python
+    region: oregon
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: LLM_MODEL
+        value: gemini-3.6-flash
+      - key: ALLOWED_ORIGINS
+        value: "*"

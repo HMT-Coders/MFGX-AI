@@ -1,0 +1,361 @@
+Date,Shift,Line,Product,Total Produced,Rejected Quantity,Defect Type
+2026-07-06,A,L1,Brake Disc,997,17,Tool mark
+2026-07-06,A,L2,Gear Housing,784,15,Surface
+2026-07-06,A,L3,Brake Disc,1094,18,Tool mark
+2026-07-06,A,L4,Bearing Housing,885,14,Dimension
+2026-07-06,B,L1,Brake Disc,996,16,Dimension
+2026-07-06,B,L2,Gear Housing,796,14,Surface
+2026-07-06,B,L3,Brake Disc,1114,14,Tool mark
+2026-07-06,B,L4,Bearing Housing,903,12,Surface
+2026-07-06,C,L1,Brake Disc,986,16,Surface
+2026-07-06,C,L2,Gear Housing,790,13,Dimension
+2026-07-06,C,L3,Brake Disc,1076,19,Dimension
+2026-07-06,C,L4,Bearing Housing,873,11,Material
+2026-07-07,A,L1,Brake Disc,986,17,Tool mark
+2026-07-07,A,L2,Gear Housing,794,14,Material
+2026-07-07,A,L3,Brake Disc,1080,17,Tool mark
+2026-07-07,A,L4,Bearing Housing,891,14,Material
+2026-07-07,B,L1,Brake Disc,999,13,Tool mark
+2026-07-07,B,L2,Gear Housing,811,11,Surface
+2026-07-07,B,L3,Brake Disc,1100,15,Dimension
+2026-07-07,B,L4,Bearing Housing,899,12,Tool mark
+2026-07-07,C,L1,Brake Disc,974,16,Dimension
+2026-07-07,C,L2,Gear Housing,784,10,Material
+2026-07-07,C,L3,Brake Disc,1070,14,Surface
+2026-07-07,C,L4,Bearing Housing,876,17,Dimension
+2026-07-08,A,L1,Brake Disc,995,20,Tool mark
+2026-07-08,A,L2,Gear Housing,793,15,Dimension
+2026-07-08,A,L3,Brake Disc,1080,13,Tool mark
+2026-07-08,A,L4,Bearing Housing,896,13,Tool mark
+2026-07-08,B,L1,Brake Disc,996,20,Material
+2026-07-08,B,L2,Gear Housing,803,14,Material
+2026-07-08,B,L3,Brake Disc,1116,15,Tool mark
+2026-07-08,B,L4,Bearing Housing,914,17,Surface
+2026-07-08,C,L1,Brake Disc,977,13,Dimension
+2026-07-08,C,L2,Gear Housing,776,14,Tool mark
+2026-07-08,C,L3,Brake Disc,1085,21,Tool mark
+2026-07-08,C,L4,Bearing Housing,872,17,Tool mark
+2026-07-09,A,L1,Brake Disc,982,12,Surface
+2026-07-09,A,L2,Gear Housing,785,10,Dimension
+2026-07-09,A,L3,Brake Disc,1093,14,Tool mark
+2026-07-09,A,L4,Bearing Housing,884,16,Dimension
+2026-07-09,B,L1,Brake Disc,1000,16,Material
+2026-07-09,B,L2,Gear Housing,813,12,Dimension
+2026-07-09,B,L3,Brake Disc,1118,22,Dimension
+2026-07-09,B,L4,Bearing Housing,909,12,Dimension
+2026-07-09,C,L1,Brake Disc,984,13,Tool mark
+2026-07-09,C,L2,Gear Housing,776,13,Dimension
+2026-07-09,C,L3,Brake Disc,1062,16,Surface
+2026-07-09,C,L4,Bearing Housing,887,13,Tool mark
+2026-07-10,A,L1,Brake Disc,985,17,Material
+2026-07-10,A,L2,Gear Housing,791,14,Dimension
+2026-07-10,A,L3,Brake Disc,1076,20,Tool mark
+2026-07-10,A,L4,Bearing Housing,885,16,Tool mark
+2026-07-10,B,L1,Brake Disc,1014,15,Surface
+2026-07-10,B,L2,Gear Housing,801,13,Tool mark
+2026-07-10,B,L3,Brake Disc,1103,19,Surface
+2026-07-10,B,L4,Bearing Housing,911,16,Surface
+2026-07-10,C,L1,Brake Disc,965,19,Surface
+2026-07-10,C,L2,Gear Housing,782,10,Surface
+2026-07-10,C,L3,Brake Disc,1065,14,Surface
+2026-07-10,C,L4,Bearing Housing,871,12,Surface
+2026-07-11,A,L1,Brake Disc,978,15,Material
+2026-07-11,A,L2,Gear Housing,789,15,Surface
+2026-07-11,A,L3,Brake Disc,1088,16,Surface
+2026-07-11,A,L4,Bearing Housing,882,15,Tool mark
+2026-07-11,B,L1,Brake Disc,1001,15,Dimension
+2026-07-11,B,L2,Gear Housing,813,15,Dimension
+2026-07-11,B,L3,Brake Disc,1110,21,Surface
+2026-07-11,B,L4,Bearing Housing,904,12,Dimension
+2026-07-11,C,L1,Brake Disc,975,18,Tool mark
+2026-07-11,C,L2,Gear Housing,773,11,Surface
+2026-07-11,C,L3,Brake Disc,1070,19,Tool mark
+2026-07-11,C,L4,Bearing Housing,878,15,Tool mark
+2026-07-12,A,L1,Brake Disc,986,12,Material
+2026-07-12,A,L2,Gear Housing,780,15,Tool mark
+2026-07-12,A,L3,Brake Disc,1092,19,Dimension
+2026-07-12,A,L4,Bearing Housing,876,13,Surface
+2026-07-12,B,L1,Brake Disc,1013,12,Material
+2026-07-12,B,L2,Gear Housing,810,10,Dimension
+2026-07-12,B,L3,Brake Disc,1094,20,Dimension
+2026-07-12,B,L4,Bearing Housing,894,13,Dimension
+2026-07-12,C,L1,Brake Disc,980,15,Surface
+2026-07-12,C,L2,Gear Housing,780,14,Tool mark
+2026-07-12,C,L3,Brake Disc,1065,18,Dimension
+2026-07-12,C,L4,Bearing Housing,873,13,Tool mark
+2026-07-13,A,L1,Brake Disc,989,13,Surface
+2026-07-13,A,L2,Gear Housing,780,12,Tool mark
+2026-07-13,A,L3,Brake Disc,1071,14,Dimension
+2026-07-13,A,L4,Bearing Housing,886,13,Material
+2026-07-13,B,L1,Brake Disc,1011,16,Tool mark
+2026-07-13,B,L2,Gear Housing,802,12,Dimension
+2026-07-13,B,L3,Brake Disc,1095,15,Tool mark
+2026-07-13,B,L4,Bearing Housing,911,13,Tool mark
+2026-07-13,C,L1,Brake Disc,969,14,Material
+2026-07-13,C,L2,Gear Housing,782,12,Dimension
+2026-07-13,C,L3,Brake Disc,1077,17,Surface
+2026-07-13,C,L4,Bearing Housing,877,16,Surface
+2026-07-14,A,L1,Brake Disc,996,16,Surface
+2026-07-14,A,L2,Gear Housing,790,14,Surface
+2026-07-14,A,L3,Brake Disc,1092,14,Surface
+2026-07-14,A,L4,Bearing Housing,879,15,Surface
+2026-07-14,B,L1,Brake Disc,1011,16,Material
+2026-07-14,B,L2,Gear Housing,795,15,Material
+2026-07-14,B,L3,Brake Disc,1117,21,Tool mark
+2026-07-14,B,L4,Bearing Housing,913,14,Tool mark
+2026-07-14,C,L1,Brake Disc,976,14,Material
+2026-07-14,C,L2,Gear Housing,779,10,Surface
+2026-07-14,C,L3,Brake Disc,1074,20,Tool mark
+2026-07-14,C,L4,Bearing Housing,883,11,Tool mark
+2026-07-15,A,L1,Brake Disc,976,17,Material
+2026-07-15,A,L2,Gear Housing,790,14,Material
+2026-07-15,A,L3,Brake Disc,1079,17,Tool mark
+2026-07-15,A,L4,Bearing Housing,877,17,Dimension
+2026-07-15,B,L1,Brake Disc,1000,14,Material
+2026-07-15,B,L2,Gear Housing,805,12,Surface
+2026-07-15,B,L3,Brake Disc,1108,19,Material
+2026-07-15,B,L4,Bearing Housing,911,16,Material
+2026-07-15,C,L1,Brake Disc,982,19,Material
+2026-07-15,C,L2,Gear Housing,774,15,Dimension
+2026-07-15,C,L3,Brake Disc,1077,13,Dimension
+2026-07-15,C,L4,Bearing Housing,884,17,Surface
+2026-07-16,A,L1,Brake Disc,989,14,Surface
+2026-07-16,A,L2,Gear Housing,787,11,Dimension
+2026-07-16,A,L3,Brake Disc,1073,18,Material
+2026-07-16,A,L4,Bearing Housing,877,15,Tool mark
+2026-07-16,B,L1,Brake Disc,1008,19,Material
+2026-07-16,B,L2,Gear Housing,805,14,Surface
+2026-07-16,B,L3,Brake Disc,1117,22,Dimension
+2026-07-16,B,L4,Bearing Housing,910,12,Dimension
+2026-07-16,C,L1,Brake Disc,981,13,Material
+2026-07-16,C,L2,Gear Housing,778,15,Dimension
+2026-07-16,C,L3,Brake Disc,1082,15,Material
+2026-07-16,C,L4,Bearing Housing,883,17,Surface
+2026-07-17,A,L1,Brake Disc,977,15,Material
+2026-07-17,A,L2,Gear Housing,791,10,Material
+2026-07-17,A,L3,Brake Disc,1071,13,Dimension
+2026-07-17,A,L4,Bearing Housing,890,13,Tool mark
+2026-07-17,B,L1,Brake Disc,1002,19,Surface
+2026-07-17,B,L2,Gear Housing,800,13,Dimension
+2026-07-17,B,L3,Brake Disc,1114,14,Surface
+2026-07-17,B,L4,Bearing Housing,915,16,Material
+2026-07-17,C,L1,Brake Disc,966,12,Material
+2026-07-17,C,L2,Gear Housing,782,11,Dimension
+2026-07-17,C,L3,Brake Disc,1069,20,Surface
+2026-07-17,C,L4,Bearing Housing,887,14,Surface
+2026-07-18,A,L1,Brake Disc,994,14,Material
+2026-07-18,A,L2,Gear Housing,793,11,Tool mark
+2026-07-18,A,L3,Brake Disc,1071,14,Material
+2026-07-18,A,L4,Bearing Housing,893,15,Material
+2026-07-18,B,L1,Brake Disc,996,18,Surface
+2026-07-18,B,L2,Gear Housing,807,13,Surface
+2026-07-18,B,L3,Brake Disc,1105,20,Material
+2026-07-18,B,L4,Bearing Housing,904,13,Material
+2026-07-18,C,L1,Brake Disc,978,14,Material
+2026-07-18,C,L2,Gear Housing,771,12,Dimension
+2026-07-18,C,L3,Brake Disc,1080,21,Material
+2026-07-18,C,L4,Bearing Housing,888,11,Material
+2026-07-19,A,L1,Brake Disc,989,14,Tool mark
+2026-07-19,A,L2,Gear Housing,795,13,Dimension
+2026-07-19,A,L3,Brake Disc,1089,16,Surface
+2026-07-19,A,L4,Bearing Housing,893,14,Tool mark
+2026-07-19,B,L1,Brake Disc,1011,15,Tool mark
+2026-07-19,B,L2,Gear Housing,795,13,Surface
+2026-07-19,B,L3,Brake Disc,1095,16,Tool mark
+2026-07-19,B,L4,Bearing Housing,915,11,Tool mark
+2026-07-19,C,L1,Brake Disc,965,17,Material
+2026-07-19,C,L2,Gear Housing,782,13,Surface
+2026-07-19,C,L3,Brake Disc,1067,15,Dimension
+2026-07-19,C,L4,Bearing Housing,884,14,Material
+2026-07-20,A,L1,Brake Disc,975,18,Surface
+2026-07-20,A,L2,Gear Housing,779,12,Tool mark
+2026-07-20,A,L3,Brake Disc,1061,18,Material
+2026-07-20,A,L4,Bearing Housing,896,12,Material
+2026-07-20,B,L1,Brake Disc,1004,14,Material
+2026-07-20,B,L2,Gear Housing,808,11,Surface
+2026-07-20,B,L3,Brake Disc,1089,18,Tool mark
+2026-07-20,B,L4,Bearing Housing,908,17,Surface
+2026-07-20,C,L1,Brake Disc,963,12,Dimension
+2026-07-20,C,L2,Gear Housing,773,11,Surface
+2026-07-20,C,L3,Brake Disc,1041,18,Material
+2026-07-20,C,L4,Bearing Housing,880,14,Surface
+2026-07-21,A,L1,Brake Disc,997,16,Material
+2026-07-21,A,L2,Gear Housing,791,14,Tool mark
+2026-07-21,A,L3,Brake Disc,1081,14,Tool mark
+2026-07-21,A,L4,Bearing Housing,877,12,Surface
+2026-07-21,B,L1,Brake Disc,1003,15,Material
+2026-07-21,B,L2,Gear Housing,796,14,Surface
+2026-07-21,B,L3,Brake Disc,1112,19,Dimension
+2026-07-21,B,L4,Bearing Housing,902,17,Surface
+2026-07-21,C,L1,Brake Disc,977,14,Surface
+2026-07-21,C,L2,Gear Housing,772,11,Tool mark
+2026-07-21,C,L3,Brake Disc,1082,13,Material
+2026-07-21,C,L4,Bearing Housing,887,16,Surface
+2026-07-22,A,L1,Brake Disc,977,13,Material
+2026-07-22,A,L2,Gear Housing,784,12,Surface
+2026-07-22,A,L3,Brake Disc,1074,13,Dimension
+2026-07-22,A,L4,Bearing Housing,879,12,Tool mark
+2026-07-22,B,L1,Brake Disc,998,13,Material
+2026-07-22,B,L2,Gear Housing,808,10,Tool mark
+2026-07-22,B,L3,Brake Disc,1111,21,Surface
+2026-07-22,B,L4,Bearing Housing,907,17,Tool mark
+2026-07-22,C,L1,Brake Disc,965,14,Material
+2026-07-22,C,L2,Gear Housing,782,13,Dimension
+2026-07-22,C,L3,Brake Disc,1073,17,Tool mark
+2026-07-22,C,L4,Bearing Housing,879,16,Material
+2026-07-23,A,L1,Brake Disc,991,16,Surface
+2026-07-23,A,L2,Gear Housing,796,11,Material
+2026-07-23,A,L3,Brake Disc,1088,20,Material
+2026-07-23,A,L4,Bearing Housing,882,12,Tool mark
+2026-07-23,B,L1,Brake Disc,1015,19,Surface
+2026-07-23,B,L2,Gear Housing,808,11,Material
+2026-07-23,B,L3,Brake Disc,1114,15,Dimension
+2026-07-23,B,L4,Bearing Housing,894,16,Tool mark
+2026-07-23,C,L1,Brake Disc,972,19,Dimension
+2026-07-23,C,L2,Gear Housing,789,12,Material
+2026-07-23,C,L3,Brake Disc,1071,17,Material
+2026-07-23,C,L4,Bearing Housing,886,13,Material
+2026-07-24,A,L1,Brake Disc,989,14,Tool mark
+2026-07-24,A,L2,Gear Housing,796,15,Surface
+2026-07-24,A,L3,Brake Disc,1074,21,Tool mark
+2026-07-24,A,L4,Bearing Housing,887,16,Tool mark
+2026-07-24,B,L1,Brake Disc,1014,15,Material
+2026-07-24,B,L2,Gear Housing,802,12,Material
+2026-07-24,B,L3,Brake Disc,1114,17,Material
+2026-07-24,B,L4,Bearing Housing,904,17,Dimension
+2026-07-24,C,L1,Brake Disc,982,16,Material
+2026-07-24,C,L2,Gear Housing,786,10,Surface
+2026-07-24,C,L3,Brake Disc,1063,14,Dimension
+2026-07-24,C,L4,Bearing Housing,869,14,Surface
+2026-07-25,A,L1,Brake Disc,986,14,Tool mark
+2026-07-25,A,L2,Gear Housing,785,12,Surface
+2026-07-25,A,L3,Brake Disc,1091,18,Dimension
+2026-07-25,A,L4,Bearing Housing,888,14,Surface
+2026-07-25,B,L1,Brake Disc,1008,15,Dimension
+2026-07-25,B,L2,Gear Housing,802,11,Dimension
+2026-07-25,B,L3,Brake Disc,1093,21,Surface
+2026-07-25,B,L4,Bearing Housing,902,15,Material
+2026-07-25,C,L1,Brake Disc,985,19,Material
+2026-07-25,C,L2,Gear Housing,786,14,Surface
+2026-07-25,C,L3,Brake Disc,1085,13,Material
+2026-07-25,C,L4,Bearing Housing,869,14,Dimension
+2026-07-26,A,L1,Brake Disc,988,18,Dimension
+2026-07-26,A,L2,Gear Housing,779,15,Tool mark
+2026-07-26,A,L3,Brake Disc,1089,20,Tool mark
+2026-07-26,A,L4,Bearing Housing,881,15,Dimension
+2026-07-26,B,L1,Brake Disc,1003,16,Material
+2026-07-26,B,L2,Gear Housing,796,13,Dimension
+2026-07-26,B,L3,Brake Disc,1115,22,Dimension
+2026-07-26,B,L4,Bearing Housing,895,16,Tool mark
+2026-07-26,C,L1,Brake Disc,966,17,Tool mark
+2026-07-26,C,L2,Gear Housing,772,14,Tool mark
+2026-07-26,C,L3,Brake Disc,1072,19,Surface
+2026-07-26,C,L4,Bearing Housing,887,11,Material
+2026-07-27,A,L1,Brake Disc,993,14,Surface
+2026-07-27,A,L2,Gear Housing,797,14,Tool mark
+2026-07-27,A,L3,Brake Disc,1086,16,Dimension
+2026-07-27,A,L4,Bearing Housing,876,11,Tool mark
+2026-07-27,B,L1,Brake Disc,1017,17,Tool mark
+2026-07-27,B,L2,Gear Housing,807,15,Tool mark
+2026-07-27,B,L3,Brake Disc,1096,20,Surface
+2026-07-27,B,L4,Bearing Housing,914,12,Material
+2026-07-27,C,L1,Brake Disc,970,12,Dimension
+2026-07-27,C,L2,Gear Housing,783,10,Material
+2026-07-27,C,L3,Brake Disc,1068,21,Material
+2026-07-27,C,L4,Bearing Housing,873,11,Dimension
+2026-07-28,A,L1,Brake Disc,983,18,Material
+2026-07-28,A,L2,Gear Housing,792,13,Dimension
+2026-07-28,A,L3,Brake Disc,1040,22,Material
+2026-07-28,A,L4,Bearing Housing,877,16,Tool mark
+2026-07-28,B,L1,Brake Disc,1005,17,Tool mark
+2026-07-28,B,L2,Gear Housing,809,11,Material
+2026-07-28,B,L3,Brake Disc,1055,22,Surface
+2026-07-28,B,L4,Bearing Housing,901,18,Material
+2026-07-28,C,L1,Brake Disc,980,13,Material
+2026-07-28,C,L2,Gear Housing,776,15,Tool mark
+2026-07-28,C,L3,Brake Disc,1024,22,Tool mark
+2026-07-28,C,L4,Bearing Housing,870,15,Dimension
+2026-07-29,A,L1,Brake Disc,994,14,Material
+2026-07-29,A,L2,Gear Housing,779,10,Material
+2026-07-29,A,L3,Brake Disc,1077,13,Dimension
+2026-07-29,A,L4,Bearing Housing,891,11,Tool mark
+2026-07-29,B,L1,Brake Disc,1015,13,Tool mark
+2026-07-29,B,L2,Gear Housing,808,12,Material
+2026-07-29,B,L3,Brake Disc,1093,18,Tool mark
+2026-07-29,B,L4,Bearing Housing,897,12,Material
+2026-07-29,C,L1,Brake Disc,985,13,Surface
+2026-07-29,C,L2,Gear Housing,771,13,Dimension
+2026-07-29,C,L3,Brake Disc,1060,17,Dimension
+2026-07-29,C,L4,Bearing Housing,886,17,Surface
+2026-07-30,A,L1,Brake Disc,987,15,Dimension
+2026-07-30,A,L2,Gear Housing,780,12,Dimension
+2026-07-30,A,L3,Brake Disc,1096,20,Dimension
+2026-07-30,A,L4,Bearing Housing,885,17,Tool mark
+2026-07-30,B,L1,Brake Disc,1014,20,Dimension
+2026-07-30,B,L2,Gear Housing,808,14,Surface
+2026-07-30,B,L3,Brake Disc,1099,21,Material
+2026-07-30,B,L4,Bearing Housing,903,11,Surface
+2026-07-30,C,L1,Brake Disc,973,17,Material
+2026-07-30,C,L2,Gear Housing,783,15,Surface
+2026-07-30,C,L3,Brake Disc,1073,20,Tool mark
+2026-07-30,C,L4,Bearing Housing,881,15,Surface
+2026-07-31,A,L1,Brake Disc,991,15,Material
+2026-07-31,A,L2,Gear Housing,780,11,Tool mark
+2026-07-31,A,L3,Brake Disc,1092,18,Surface
+2026-07-31,A,L4,Bearing Housing,888,16,Tool mark
+2026-07-31,B,L1,Brake Disc,1006,16,Material
+2026-07-31,B,L2,Gear Housing,802,13,Surface
+2026-07-31,B,L3,Brake Disc,1096,18,Dimension
+2026-07-31,B,L4,Bearing Housing,903,13,Dimension
+2026-07-31,C,L1,Brake Disc,983,19,Tool mark
+2026-07-31,C,L2,Gear Housing,778,12,Surface
+2026-07-31,C,L3,Brake Disc,1080,15,Tool mark
+2026-07-31,C,L4,Bearing Housing,880,16,Material
+2026-08-01,A,L1,Brake Disc,996,12,Surface
+2026-08-01,A,L2,Gear Housing,779,11,Dimension
+2026-08-01,A,L3,Brake Disc,1078,21,Surface
+2026-08-01,A,L4,Bearing Housing,895,12,Dimension
+2026-08-01,B,L1,Brake Disc,997,13,Surface
+2026-08-01,B,L2,Gear Housing,796,15,Tool mark
+2026-08-01,B,L3,Brake Disc,1116,22,Material
+2026-08-01,B,L4,Bearing Housing,902,17,Material
+2026-08-01,C,L1,Brake Disc,978,16,Dimension
+2026-08-01,C,L2,Gear Housing,771,14,Dimension
+2026-08-01,C,L3,Brake Disc,1065,21,Material
+2026-08-01,C,L4,Bearing Housing,871,11,Dimension
+2026-08-02,A,L1,Brake Disc,997,19,Surface
+2026-08-02,A,L2,Gear Housing,786,15,Dimension
+2026-08-02,A,L3,Brake Disc,1045,28,Dimension
+2026-08-02,A,L4,Bearing Housing,897,13,Dimension
+2026-08-02,B,L1,Brake Disc,1017,12,Material
+2026-08-02,B,L2,Gear Housing,795,15,Surface
+2026-08-02,B,L3,Brake Disc,1061,28,Dimension
+2026-08-02,B,L4,Bearing Housing,898,17,Material
+2026-08-02,C,L1,Brake Disc,979,12,Dimension
+2026-08-02,C,L2,Gear Housing,773,12,Surface
+2026-08-02,C,L3,Brake Disc,1031,28,Dimension
+2026-08-02,C,L4,Bearing Housing,884,12,Tool mark
+2026-08-03,A,L1,Brake Disc,996,15,Surface
+2026-08-03,A,L2,Gear Housing,779,12,Surface
+2026-08-03,A,L3,Brake Disc,1024,35,Tool mark
+2026-08-03,A,L4,Bearing Housing,891,15,Tool mark
+2026-08-03,B,L1,Brake Disc,1015,15,Surface
+2026-08-03,B,L2,Gear Housing,794,15,Tool mark
+2026-08-03,B,L3,Brake Disc,1032,35,Material
+2026-08-03,B,L4,Bearing Housing,895,16,Dimension
+2026-08-03,C,L1,Brake Disc,966,18,Surface
+2026-08-03,C,L2,Gear Housing,776,15,Material
+2026-08-03,C,L3,Brake Disc,1006,35,Tool mark
+2026-08-03,C,L4,Bearing Housing,882,12,Tool mark
+2026-08-04,A,L1,Brake Disc,976,15,Material
+2026-08-04,A,L2,Gear Housing,795,11,Surface
+2026-08-04,A,L3,Brake Disc,965,48,Dimension
+2026-08-04,A,L4,Bearing Housing,884,16,Tool mark
+2026-08-04,B,L1,Brake Disc,997,19,Material
+2026-08-04,B,L2,Gear Housing,801,12,Material
+2026-08-04,B,L3,Brake Disc,970,45,Dimension
+2026-08-04,B,L4,Bearing Housing,904,11,Dimension
+2026-08-04,C,L1,Brake Disc,984,14,Tool mark
+2026-08-04,C,L2,Gear Housing,787,11,Dimension
+2026-08-04,C,L3,Brake Disc,960,46,Dimension
+2026-08-04,C,L4,Bearing Housing,886,11,Tool mark

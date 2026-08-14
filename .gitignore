@@ -1,0 +1,26 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies & Builds
+node_modules/
+dist/
+dist-ssr/
+build/
+.venv/
+venv/
+ENV/
+
+# Python Cache & Runtime
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,40 @@
+Date,Machine ID,Reported Problem,Maintenance Action,Status
+2026-07-20,M301,High temperature warning,Cooling system checked,Resolved
+2026-07-28,M301,High temperature warning,Cooling filter cleaned,Resolved
+2026-08-02,M301,Temperature warning,Cooling system inspected,Monitoring
+2026-08-04,M301,Overheating,Cooling system investigation requested,Pending
+2026-07-07,M303,Filter check,Inspected,Completed
+2026-07-07,M101,Minor vibration,Adjusted,Resolved
+2026-07-08,M403,Routine inspection,Cleaned,Resolved
+2026-07-08,M402,Lubrication check,Checked,Completed
+2026-07-09,M304,Lubrication check,Cleaned,Completed
+2026-07-10,M404,Preventive maintenance,Lubricated,Completed
+2026-07-10,M103,Lubrication check,Checked,Completed
+2026-07-11,M402,Minor vibration,Lubricated,Completed
+2026-07-12,M302,Routine inspection,Lubricated,Resolved
+2026-07-13,M102,Preventive maintenance,Lubricated,Resolved
+2026-07-16,M203,Preventive maintenance,Inspected,Resolved
+2026-07-16,M201,Filter check,Lubricated,Resolved
+2026-07-17,M204,Lubrication check,Inspected,Completed
+2026-07-17,M403,Filter check,Checked,Resolved
+2026-07-18,M202,Preventive maintenance,Cleaned,Resolved
+2026-07-18,M302,Lubrication check,Inspected,Completed
+2026-07-19,M103,Routine inspection,Cleaned,Resolved
+2026-07-19,M401,Filter check,Cleaned,Resolved
+2026-07-20,M101,Lubrication check,Inspected,Completed
+2026-07-21,M304,Minor vibration,Lubricated,Resolved
+2026-07-23,M104,Filter check,Lubricated,Resolved
+2026-07-24,M304,Minor vibration,Checked,Resolved
+2026-07-24,M404,Preventive maintenance,Inspected,Resolved
+2026-07-25,M203,Minor vibration,Checked,Completed
+2026-07-25,M102,Preventive maintenance,Checked,Completed
+2026-07-26,M102,Preventive maintenance,Checked,Completed
+2026-07-26,M404,Routine inspection,Lubricated,Resolved
+2026-07-27,M204,Lubrication check,Adjusted,Completed
+2026-07-27,M102,Filter check,Cleaned,Completed
+2026-07-28,M402,Routine inspection,Cleaned,Resolved
+2026-07-30,M404,Filter check,Inspected,Completed
+2026-07-30,M103,Preventive maintenance,Inspected,Resolved
+2026-07-31,M204,Filter check,Checked,Completed
+2026-08-03,M103,Filter check,Inspected,Resolved
+2026-08-04,M104,Filter check,Cleaned,Completed
