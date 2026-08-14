@@ -1,11 +1,32 @@
+import os
+import gc
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.utils import embedding_functions
 
+# PyTorch CPU thread & memory optimization for low-RAM (512MB) cloud instances
+try:
+    import torch
+    torch.set_num_threads(1)
+    torch.set_grad_enabled(False)
+except ImportError:
+    pass
+
 
 class SOPRAG:
+    _instance: Optional['SOPRAG'] = None
+
+    def __new__(cls, chroma_dir: Optional[Path] = None):
+        if cls._instance is None:
+            cls._instance = super(SOPRAG, cls).__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self, chroma_dir: Optional[Path] = None):
+        if getattr(self, "_initialized", False):
+            return
+
         if chroma_dir is None:
             backend_dir = Path(__file__).resolve().parent
             self.chroma_dir = backend_dir / "chroma_db"
@@ -20,6 +41,7 @@ class SOPRAG:
             name="mfgx_sops",
             embedding_function=self.embedding_fn
         )
+        self._initialized = True
 
     def search_sops(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         """
@@ -55,14 +77,9 @@ class SOPRAG:
         return formatted_results
 
 
-# Function helper for direct use
-_sop_rag_instance: Optional[SOPRAG] = None
-
+# Helper functions reusing singleton instance
 def get_sop_rag() -> SOPRAG:
-    global _sop_rag_instance
-    if _sop_rag_instance is None:
-        _sop_rag_instance = SOPRAG()
-    return _sop_rag_instance
+    return SOPRAG()
 
 def search_sops(query: str, top_k: int = 5) -> List[Dict[str, Any]]:
     rag = get_sop_rag()

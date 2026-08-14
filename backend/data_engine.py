@@ -11,7 +11,18 @@ class FactoryDataEngine:
         "L4": ["M401", "M402", "M403", "M404"],
     }
 
+    _instance: Optional['FactoryDataEngine'] = None
+
+    def __new__(cls, data_dir: Optional[Path] = None):
+        if cls._instance is None:
+            cls._instance = super(FactoryDataEngine, cls).__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self, data_dir: Optional[Path] = None):
+        if getattr(self, "_initialized", False):
+            return
+
         if data_dir is None:
             base_dir = Path(__file__).resolve().parent
             self.data_dir = base_dir.parent / "data"
@@ -19,6 +30,7 @@ class FactoryDataEngine:
             self.data_dir = Path(data_dir)
 
         self._load_data()
+        self._initialized = True
 
     def _load_data(self):
         prod_path = self.data_dir / "production.csv"
@@ -104,67 +116,35 @@ class FactoryDataEngine:
         ]
 
         if df.empty:
-            return None
+            return {
+                "line": line,
+                "date": target_date.strftime("%Y-%m-%d"),
+                "total_downtime_minutes": 0,
+                "records": []
+            }
 
+        total_downtime = int(df["Duration"].sum())
         records = []
         for _, row in df.iterrows():
             records.append({
-                "date": row["Date"].strftime("%Y-%m-%d"),
-                "shift": str(row["Shift"]),
                 "machine_id": str(row["Machine ID"]),
-                "start_time": str(row["Start Time"]),
+                "start_time": str(row.get("Start Time", "")),
                 "duration": int(row["Duration"]),
                 "reason": str(row["Reason"]),
-                "category": str(row["Category"]),
-                "Machine ID": str(row["Machine ID"]),
-                "Start Time": str(row["Start Time"]),
-                "Duration": int(row["Duration"]),
-                "Reason": str(row["Reason"]),
-                "Category": str(row["Category"])
+                "category": str(row.get("Category", "Unscheduled"))
             })
 
-        formatted_date = target_date.strftime("%Y-%m-%d")
         return {
             "line": line,
-            "date": formatted_date,
-            "records": records
-        }
-
-    def get_maintenance_history(self, machine_id: str) -> Optional[Dict[str, Any]]:
-        """
-        Return all maintenance records for the specified machine, sorted by date.
-        """
-        df = self.maintenance_df[self.maintenance_df["Machine ID"] == machine_id].sort_values("Date")
-
-        if df.empty:
-            # Check if machine exists in any line mapping
-            known_machines = [m for sublist in self.LINE_MAPPING.values() for m in sublist]
-            if machine_id not in known_machines and machine_id not in self.maintenance_df["Machine ID"].unique():
-                raise ValueError(f"Unknown machine ID: {machine_id}")
-            return None
-
-        records = []
-        for _, row in df.iterrows():
-            records.append({
-                "date": row["Date"].strftime("%Y-%m-%d"),
-                "machine_id": str(row["Machine ID"]),
-                "reported_problem": str(row["Reported Problem"]),
-                "maintenance_action": str(row["Maintenance Action"]),
-                "status": str(row["Status"]),
-                "Reported Problem": str(row["Reported Problem"]),
-                "Maintenance Action": str(row["Maintenance Action"]),
-                "Status": str(row["Status"])
-            })
-
-        return {
-            "machine_id": machine_id,
+            "date": target_date.strftime("%Y-%m-%d"),
+            "total_downtime_minutes": total_downtime,
             "records": records
         }
 
     def get_quality(self, line: str, date_str: str) -> Optional[Dict[str, Any]]:
         """
-        Filter quality data by line and date.
-        Calculates total_produced, total_rejected, rejection_rate, and records list.
+        Return quality inspection records, defect counts, total produced, total rejected,
+        and calculated rejection rate.
         """
         try:
             target_date = pd.to_datetime(date_str)
@@ -186,19 +166,44 @@ class FactoryDataEngine:
         records = []
         for _, row in df.iterrows():
             records.append({
-                "shift": str(row["Shift"]),
-                "product": str(row["Product"]),
-                "total_produced": int(row["Total Produced"]),
-                "rejected_quantity": int(row["Rejected Quantity"]),
-                "defect_type": str(row["Defect Type"])
+                "shift": str(row.get("Shift", "")),
+                "inspected": int(row["Total Produced"]),
+                "rejected": int(row["Rejected Quantity"]),
+                "defect_type": str(row.get("Defect Type", "General"))
             })
 
-        formatted_date = target_date.strftime("%Y-%m-%d")
         return {
             "line": line,
-            "date": formatted_date,
+            "date": target_date.strftime("%Y-%m-%d"),
             "total_produced": total_produced,
             "total_rejected": total_rejected,
             "rejection_rate": rejection_rate,
+            "records": records
+        }
+
+    def get_maintenance_history(self, machine_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Filter maintenance records for a specific machine ID across all dates.
+        """
+        df = self.maintenance_df[self.maintenance_df["Machine ID"] == machine_id].sort_values("Date", ascending=False)
+
+        if df.empty:
+            return None
+
+        records = []
+        for _, row in df.iterrows():
+            d_val = row["Date"]
+            d_str = d_val.strftime("%Y-%m-%d") if hasattr(d_val, "strftime") else str(d_val)
+            records.append({
+                "machine_id": str(row["Machine ID"]),
+                "date": d_str,
+                "reported_problem": str(row["Reported Problem"]),
+                "maintenance_action": str(row["Maintenance Action"]),
+                "status": str(row.get("Status", "Resolved"))
+            })
+
+        return {
+            "machine_id": machine_id,
+            "total_incidents": len(records),
             "records": records
         }
