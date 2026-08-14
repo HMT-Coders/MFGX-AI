@@ -2,8 +2,8 @@ fastapi
 uvicorn
 pandas
 pypdf
-chromadb
-sentence-transformers
+numpy
+scikit-learn
 openai
 google-genai
 python-dotenv

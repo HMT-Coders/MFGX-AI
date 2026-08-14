@@ -1,0 +1,101 @@
+[
+  {
+    "id": "SOP-301-page-1-chunk-0",
+    "text": "M301 Cooling System Inspection\n\nPurpose:\nProvide a standard procedure for inspecting the cooling\nsystem of M301 when abnormal temperature is detected.\n\nApplicable Machine:\nM301 \u2014 CNC Machine\n\nTrigger conditions:\n\u25cf High-temperature warning\n\n\u25cf Abnormal temperature increase\n\n\u25cf Reduced cooling performance\n\n\u25cf Repeated temperature alarms\n\nSafety precautions:\n1. Stop the machine according to the approved shutdown\nprocedure.\n2. Isolate power before physical inspection.\n3. Allow hot components to cool before inspection.\n4. Wear required PPE.\n5. Do not bypass temperature or safety sensors.\n\nInspection procedure:\n1. Check the coolant level.\n2. Check",
+    "metadata": {
+      "sop_id": "SOP-301",
+      "source": "SOP-301.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-301-page-1-chunk-1",
+    "text": "ot bypass temperature or safety sensors.\n\nInspection procedure:\n1. Check the coolant level.\n2. Check coolant flow.\n3. Inspect the cooling lines for blockage or leakage.\n4. Inspect the cooling filter.\n5. Check the cooling unit/fan.\n6. Check the temperature sensor.\n7. Record the observed temperature and condition.\n8. Escalate to maintenance if the abnormal condition\npersists.\n\nPossible findings:\n\u25cf Low coolant level\n\n\u25cf Blocked filter\n\n\u25cf Restricted coolant flow",
+    "metadata": {
+      "sop_id": "SOP-301",
+      "source": "SOP-301.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-301-page-2-chunk-0",
+    "text": "\u25cf Cooling-system malfunction\n\n\u25cf Sensor abnormality\n\nRequired action:\nIf overheating continues after basic inspection, stop\noperation and request maintenance inspection",
+    "metadata": {
+      "sop_id": "SOP-301",
+      "source": "SOP-301.pdf",
+      "page": 2
+    }
+  },
+  {
+    "id": "SOP-302-page-1-chunk-0",
+    "text": "M301 Overheating Response\n\nPurpose:\nDefine the procedure to follow when M301 exceeds its\nnormal operating temperature.\n\nTrigger:\nHigh-temperature alarm or abnormal temperature reading.\n\nProcedure:\n1. Stop or pause the machine safely.\n2. Record the temperature and time.\n3. Check the active alarm.\n4. Check coolant level and flow.\n5. Inspect for visible leakage or blockage.\n6. Do not restart repeatedly if overheating continues.\n7. Contact the maintenance team.\n8. Record the incident in the maintenance log.\n\nEscalation condition:\nRepeated overheating or unresolved temperature\nabnormality requires maintenance inspection before\nproduction",
+    "metadata": {
+      "sop_id": "SOP-302",
+      "source": "SOP-302.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-302-page-1-chunk-1",
+    "text": "overheating or unresolved temperature\nabnormality requires maintenance inspection before\nproduction resumes.\n\nImportant:\nThis SOP does not authorize an operator to perform\nrepairs beyond their approved responsibilities.",
+    "metadata": {
+      "sop_id": "SOP-302",
+      "source": "SOP-302.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-303-page-1-chunk-0",
+    "text": "CNC Machine Troubleshooting\n\nPurpose:\nProvide general troubleshooting guidance for CNC machine\nabnormalities.\n\nApplicable Machines:\nM101, M201, M301, M401 and equivalent CNC machines.\n\nCommon symptoms:\n\u25cf Overheating\n\n\u25cf Unexpected shutdown\n\n\u25cf Abnormal vibration\n\n\u25cf Unusual noise\n\n\u25cf Reduced production output\n\n\u25cf Repeated alarms\n\nInitial checks:\n1. Identify the machine alarm.\n2. Record the time and operating shift.\n3. Check the machine status.\n4. Check relevant operating parameters.\n5. Check whether the problem has occurred previously.\n6. Refer to the appropriate machine-specific SOP.\n7. Escalate unresolved issues to maintenance.\n\nDocumentation",
+    "metadata": {
+      "sop_id": "SOP-303",
+      "source": "SOP-303.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-303-page-1-chunk-1",
+    "text": "o the appropriate machine-specific SOP.\n7. Escalate unresolved issues to maintenance.\n\nDocumentation requirement:\nEvery significant machine abnormality should be recorded\nwith the machine ID, date, time, symptom, and action\ntaken.",
+    "metadata": {
+      "sop_id": "SOP-303",
+      "source": "SOP-303.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-304-page-1-chunk-0",
+    "text": "Quality Inspection Procedure\n\nPurpose:\nDefine the standard procedure for identifying and\nrecording production defects.\n\nApplicable:\nAll production lines.\n\nInspection information:\n\u25cf Product\n\n\u25cf Production line\n\n\u25cf Machine\n\n\u25cf Quantity inspected\n\n\u25cf Quantity rejected\n\n\u25cf Defect type\n\n\u25cf Shift\n\n\u25cf Date\n\nProcedure:\n1. Inspect the produced components according to the\napplicable quality standard.\n2. Separate defective components.\n3. Record the rejected quantity.\n4. Classify the defect.\n5. Identify the production line and machine where\napplicable.\n6. Notify the responsible supervisor when rejection\nexceeds the accepted threshold.\n7. Record the incident",
+    "metadata": {
+      "sop_id": "SOP-304",
+      "source": "SOP-304.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-304-page-1-chunk-1",
+    "text": "ify the responsible supervisor when rejection\nexceeds the accepted threshold.\n7. Record the incident for further investigation.\n\nInvestigation trigger:\nA sudden increase in rejection should be investigated\nalongside production and machine-performance data.",
+    "metadata": {
+      "sop_id": "SOP-304",
+      "source": "SOP-304.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-305-page-1-chunk-0",
+    "text": "Daily Machine Maintenance Checklist\n\nPurpose:\nProvide a routine checklist for identifying machine\nissues before they cause production disruption.\n\nApplicable:\nProduction machines.\n\nDaily checks\n\u25cf Machine cleanliness\n\n\u25cf Coolant level\n\n\u25cf Cooling-system condition\n\n\u25cf Visible leakage\n\n\u25cf Abnormal noise\n\n\u25cf Abnormal vibration\n\n\u25cf Temperature indicators\n\n\u25cf Safety systems\n\n\u25cf Machine alarms\n\n\u25cf Lubrication condition\n\nRecording:\nThe maintenance/operator record should include:\n\u25cf Date\n\n\u25cf Machine ID\n\n\u25cf Shift\n\n\u25cf Observed condition\n\n\u25cf Action taken\n\n\u25cf Status\n\nEscalation:",
+    "metadata": {
+      "sop_id": "SOP-305",
+      "source": "SOP-305.pdf",
+      "page": 1
+    }
+  },
+  {
+    "id": "SOP-305-page-2-chunk-0",
+    "text": "Any abnormal condition that could affect safety, machine\noperation, or product quality should be reported to the\nappropriate maintenance/supervisory personnel.",
+    "metadata": {
+      "sop_id": "SOP-305",
+      "source": "SOP-305.pdf",
+      "page": 2
+    }
+  }
+]
