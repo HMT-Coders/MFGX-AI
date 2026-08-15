@@ -228,6 +228,12 @@ npm run build
 
 ---
 
+## 📖 Project Documentation
+
+- [Solution & Problem Statement](SOLUTION.md)
+
+---
+
 ## 📜 License
 
 Internal Proprietary Software — **MFGX AI Production Investigation Copilot**.
