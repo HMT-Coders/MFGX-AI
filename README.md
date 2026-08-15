@@ -237,3 +237,4 @@ npm run build
 ## 📜 License
 
 Internal Proprietary Software — **MFGX AI Production Investigation Copilot**.
+[![License: Custom](https://img.shields.io/badge/License-MFGX%20AI-blue.svg)](LICENSE)
