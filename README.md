@@ -496,8 +496,12 @@ The repository `.gitignore` protects `.env` and other local secrets/build artifa
 
 ## 📜 License
 
-Internal Proprietary Software — **MFGX AI Production Investigation Copilot**.
+Internal Proprietary Software — **MFGX AI Production Investigation Copilot**. 
 
 [![License: Custom](https://img.shields.io/badge/License-MFGX%20AI-blue.svg)](LICENSE)
 
 See the [LICENSE](LICENSE) file for the complete terms.
+
+---
+
+Made By Team HMTCoders with ❤️
